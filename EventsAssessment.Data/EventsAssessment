@@ -1,0 +1,763 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.4
+-- Dumped by pg_dump version 17.4
+
+-- Started on 2025-06-10 23:42:47
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 218 (class 1259 OID 24822)
+-- Name: event; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.event (
+    id integer NOT NULL,
+    name text NOT NULL,
+    description text NOT NULL,
+    event_type_id integer NOT NULL,
+    event_status_id integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.event OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 24821)
+-- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.event_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.event_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4946 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.event_id_seq OWNED BY public.event.id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 24853)
+-- Name: eventshow; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.eventshow (
+    id integer NOT NULL,
+    event_id integer NOT NULL,
+    venue_id integer NOT NULL,
+    event_start timestamp without time zone NOT NULL,
+    event_end timestamp without time zone NOT NULL,
+    show_status_id integer DEFAULT 1 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.eventshow OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 24852)
+-- Name: eventshow_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.eventshow_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.eventshow_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4947 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: eventshow_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.eventshow_id_seq OWNED BY public.eventshow.id;
+
+
+--
+-- TOC entry 222 (class 1259 OID 24842)
+-- Name: eventstatus; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.eventstatus (
+    id integer NOT NULL,
+    description text NOT NULL,
+    is_active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.eventstatus OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 24841)
+-- Name: eventstatus_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.eventstatus_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.eventstatus_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4948 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: eventstatus_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.eventstatus_id_seq OWNED BY public.eventstatus.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 24832)
+-- Name: eventtype; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.eventtype (
+    id integer NOT NULL,
+    description text NOT NULL,
+    is_active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.eventtype OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 24831)
+-- Name: eventtype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.eventtype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.eventtype_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4949 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: eventtype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.eventtype_id_seq OWNED BY public.eventtype.id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 24872)
+-- Name: showstatus; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.showstatus (
+    id integer NOT NULL,
+    description text NOT NULL,
+    is_active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.showstatus OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 24871)
+-- Name: showstatus_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.showstatus_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.showstatus_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4950 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: showstatus_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.showstatus_id_seq OWNED BY public.showstatus.id;
+
+
+--
+-- TOC entry 231 (class 1259 OID 24925)
+-- Name: showticket; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.showticket (
+    id text NOT NULL,
+    event_show_id integer NOT NULL,
+    ticket_status_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.showticket OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 24934)
+-- Name: ticketstatus; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ticketstatus (
+    id integer NOT NULL,
+    description text NOT NULL,
+    is_active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.ticketstatus OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 24933)
+-- Name: ticketstatus_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ticketstatus_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.ticketstatus_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4951 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: ticketstatus_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ticketstatus_id_seq OWNED BY public.ticketstatus.id;
+
+
+--
+-- TOC entry 230 (class 1259 OID 24900)
+-- Name: venue; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.venue (
+    id integer NOT NULL,
+    description text NOT NULL,
+    capacity integer NOT NULL,
+    address text,
+    venue_type_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    is_active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.venue OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 24899)
+-- Name: venue_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.venue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.venue_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4952 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: venue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.venue_id_seq OWNED BY public.venue.id;
+
+
+--
+-- TOC entry 228 (class 1259 OID 24887)
+-- Name: venuetype; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.venuetype (
+    id integer NOT NULL,
+    description text NOT NULL,
+    is_active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.venuetype OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 24886)
+-- Name: venuetype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.venuetype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.venuetype_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4953 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: venuetype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.venuetype_id_seq OWNED BY public.venuetype.id;
+
+
+--
+-- TOC entry 4734 (class 2604 OID 24825)
+-- Name: event id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event ALTER COLUMN id SET DEFAULT nextval('public.event_id_seq'::regclass);
+
+
+--
+-- TOC entry 4740 (class 2604 OID 24856)
+-- Name: eventshow id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventshow ALTER COLUMN id SET DEFAULT nextval('public.eventshow_id_seq'::regclass);
+
+
+--
+-- TOC entry 4738 (class 2604 OID 24845)
+-- Name: eventstatus id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventstatus ALTER COLUMN id SET DEFAULT nextval('public.eventstatus_id_seq'::regclass);
+
+
+--
+-- TOC entry 4736 (class 2604 OID 24835)
+-- Name: eventtype id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventtype ALTER COLUMN id SET DEFAULT nextval('public.eventtype_id_seq'::regclass);
+
+
+--
+-- TOC entry 4743 (class 2604 OID 24875)
+-- Name: showstatus id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showstatus ALTER COLUMN id SET DEFAULT nextval('public.showstatus_id_seq'::regclass);
+
+
+--
+-- TOC entry 4751 (class 2604 OID 24937)
+-- Name: ticketstatus id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ticketstatus ALTER COLUMN id SET DEFAULT nextval('public.ticketstatus_id_seq'::regclass);
+
+
+--
+-- TOC entry 4747 (class 2604 OID 24903)
+-- Name: venue id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venue ALTER COLUMN id SET DEFAULT nextval('public.venue_id_seq'::regclass);
+
+
+--
+-- TOC entry 4745 (class 2604 OID 24890)
+-- Name: venuetype id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venuetype ALTER COLUMN id SET DEFAULT nextval('public.venuetype_id_seq'::regclass);
+
+
+--
+-- TOC entry 4925 (class 0 OID 24822)
+-- Dependencies: 218
+-- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.event (id, name, description, event_type_id, event_status_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4931 (class 0 OID 24853)
+-- Dependencies: 224
+-- Data for Name: eventshow; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.eventshow (id, event_id, venue_id, event_start, event_end, show_status_id, created_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4929 (class 0 OID 24842)
+-- Dependencies: 222
+-- Data for Name: eventstatus; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.eventstatus (id, description, is_active) FROM stdin;
+1	Live	t
+2	Active	t
+3	Finished	t
+4	Cancelled	t
+\.
+
+
+--
+-- TOC entry 4927 (class 0 OID 24832)
+-- Dependencies: 220
+-- Data for Name: eventtype; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.eventtype (id, description, is_active) FROM stdin;
+1	Movie	t
+2	Play	t
+3	Musical	t
+4	Concert	t
+\.
+
+
+--
+-- TOC entry 4933 (class 0 OID 24872)
+-- Dependencies: 226
+-- Data for Name: showstatus; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.showstatus (id, description, is_active) FROM stdin;
+1	Screening	t
+2	Paused	t
+\.
+
+
+--
+-- TOC entry 4938 (class 0 OID 24925)
+-- Dependencies: 231
+-- Data for Name: showticket; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.showticket (id, event_show_id, ticket_status_id, created_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4940 (class 0 OID 24934)
+-- Dependencies: 233
+-- Data for Name: ticketstatus; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ticketstatus (id, description, is_active) FROM stdin;
+1	Valid	t
+2	Void	t
+3	Expired	t
+\.
+
+
+--
+-- TOC entry 4937 (class 0 OID 24900)
+-- Dependencies: 230
+-- Data for Name: venue; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.venue (id, description, capacity, address, venue_type_id, created_at, is_active) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4935 (class 0 OID 24887)
+-- Dependencies: 228
+-- Data for Name: venuetype; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.venuetype (id, description, is_active) FROM stdin;
+1	Cinema	t
+2	Theatre	t
+3	Stadium	t
+\.
+
+
+--
+-- TOC entry 4954 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.event_id_seq', 1, false);
+
+
+--
+-- TOC entry 4955 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: eventshow_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.eventshow_id_seq', 1, false);
+
+
+--
+-- TOC entry 4956 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: eventstatus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.eventstatus_id_seq', 4, true);
+
+
+--
+-- TOC entry 4957 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: eventtype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.eventtype_id_seq', 4, true);
+
+
+--
+-- TOC entry 4958 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: showstatus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.showstatus_id_seq', 2, true);
+
+
+--
+-- TOC entry 4959 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: ticketstatus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.ticketstatus_id_seq', 3, true);
+
+
+--
+-- TOC entry 4960 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: venue_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.venue_id_seq', 1, false);
+
+
+--
+-- TOC entry 4961 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: venuetype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.venuetype_id_seq', 3, true);
+
+
+--
+-- TOC entry 4754 (class 2606 OID 24830)
+-- Name: event event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT event_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4760 (class 2606 OID 24860)
+-- Name: eventshow eventshow_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventshow
+    ADD CONSTRAINT eventshow_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4758 (class 2606 OID 24850)
+-- Name: eventstatus eventstatus_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventstatus
+    ADD CONSTRAINT eventstatus_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4756 (class 2606 OID 24840)
+-- Name: eventtype eventtype_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventtype
+    ADD CONSTRAINT eventtype_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4762 (class 2606 OID 24880)
+-- Name: showstatus showstatus_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showstatus
+    ADD CONSTRAINT showstatus_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4768 (class 2606 OID 24932)
+-- Name: showticket showticket_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showticket
+    ADD CONSTRAINT showticket_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4770 (class 2606 OID 24942)
+-- Name: ticketstatus ticketstatus_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ticketstatus
+    ADD CONSTRAINT ticketstatus_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4766 (class 2606 OID 24909)
+-- Name: venue venue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venue
+    ADD CONSTRAINT venue_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4764 (class 2606 OID 24895)
+-- Name: venuetype venuetype_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venuetype
+    ADD CONSTRAINT venuetype_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4777 (class 2606 OID 24948)
+-- Name: showticket fk_event_show; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showticket
+    ADD CONSTRAINT fk_event_show FOREIGN KEY (event_show_id) REFERENCES public.eventshow(id) NOT VALID;
+
+
+--
+-- TOC entry 4771 (class 2606 OID 24866)
+-- Name: event fk_event_status; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT fk_event_status FOREIGN KEY (event_status_id) REFERENCES public.eventstatus(id) NOT VALID;
+
+
+--
+-- TOC entry 4772 (class 2606 OID 24861)
+-- Name: event fk_event_type; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT fk_event_type FOREIGN KEY (event_type_id) REFERENCES public.eventtype(id) NOT VALID;
+
+
+--
+-- TOC entry 4773 (class 2606 OID 24920)
+-- Name: eventshow fk_show_event; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventshow
+    ADD CONSTRAINT fk_show_event FOREIGN KEY (event_id) REFERENCES public.event(id) NOT VALID;
+
+
+--
+-- TOC entry 4774 (class 2606 OID 24881)
+-- Name: eventshow fk_show_status; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventshow
+    ADD CONSTRAINT fk_show_status FOREIGN KEY (show_status_id) REFERENCES public.showstatus(id) NOT VALID;
+
+
+--
+-- TOC entry 4775 (class 2606 OID 24915)
+-- Name: eventshow fk_show_venue; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventshow
+    ADD CONSTRAINT fk_show_venue FOREIGN KEY (venue_id) REFERENCES public.venue(id) NOT VALID;
+
+
+--
+-- TOC entry 4778 (class 2606 OID 24943)
+-- Name: showticket fk_ticket_status; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showticket
+    ADD CONSTRAINT fk_ticket_status FOREIGN KEY (ticket_status_id) REFERENCES public.ticketstatus(id) NOT VALID;
+
+
+--
+-- TOC entry 4776 (class 2606 OID 24910)
+-- Name: venue fk_venue_type; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venue
+    ADD CONSTRAINT fk_venue_type FOREIGN KEY (venue_type_id) REFERENCES public.venuetype(id) NOT VALID;
+
+
+-- Completed on 2025-06-10 23:42:47
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TinyMapper" Version="3.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EventsAssessment.Data\EventsAssessment.Data.csproj" />
+    <ProjectReference Include="..\EventsAssessment.Domain\EventsAssessment.Domain.csproj" />
+    <ProjectReference Include="..\EventsAssessment.Repository\EventsAssessment.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
